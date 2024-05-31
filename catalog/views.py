@@ -11,4 +11,4 @@ def contact(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
         print(f'You have new message from {name}({email}): {message}')
-    return render(request, 'contacts.html')
+    return render(request, 'contact.html')
