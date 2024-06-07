@@ -23,11 +23,10 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', help_text='Введите цену продукта')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    manufactured_at = models.DateField(default=datetime.date.today())
 
     def __str__(self):
         return f'{self.name} {self.description} {self.price}'
 
     class Meta:
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
