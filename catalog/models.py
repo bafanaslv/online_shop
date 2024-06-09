@@ -23,6 +23,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена', help_text='Введите цену продукта')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    manufactured_at = models.DateField(null=True, verbose_name='Дата производства продукта', help_text='Введите дату производства продукта')
 
     def __str__(self):
         return f'{self.name} {self.description} {self.price}'
