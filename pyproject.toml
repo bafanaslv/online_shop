@@ -11,6 +11,7 @@ django = "^5.0.6"
 black = "^24.4.2"
 pillow = "^10.3.0"
 ipython = "^8.25.0"
+requests = "^2.32.3"
 
 
 [build-system]
