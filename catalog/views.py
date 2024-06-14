@@ -1,8 +1,16 @@
 from django.shortcuts import render
+from catalog.models import Products
 
 
-def index(request):
-    return render(request, 'base.html')
+def products_list(request):
+    context = {"products": Products.objects.all()}
+    return render(request, 'products_list.html', context)
+
+
+def product_detail(request, pk):
+    product = Products.objects.get(pk=pk)
+    context = {"product": product}
+    return render(request, 'products_list.html', context)
 
 
 def home(request):
