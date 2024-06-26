@@ -1,16 +1,27 @@
 from django.shortcuts import render, get_object_or_404
-from catalog.models import Products
+from catalog.models import Products, Category
 
 
 def products_list(request):
-    context = {"products": Products.objects.all()}
+    context = {"products": Products.objects.all(),
+               "categories": Category.objects.all()}
     return render(request, 'products_list.html', context)
+
+
+def categories_list(request):
+    context = {"categories": Category.objects.all()}
+    return render(request, 'base.html', context)
 
 
 def product_detail(request, pk):
     product = get_object_or_404(Products, pk=pk)
     context = {"product": product}
     return render(request, 'product_detail.html', context)
+
+
+def products_category(request, cat):
+    context = {"products": Products.objects.filter(category=cat)}
+    return render(request, 'products_list.html', context)
 
 
 def home(request):

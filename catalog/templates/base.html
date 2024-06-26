@@ -160,18 +160,19 @@
 </header>
 <main>
 
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Каталог смартфонов</h1>
-        <p class="lead text-body-secondary">Смартфоны на любой вкус и на любой карман.</p>
-<!--        <p>-->
-<!--          <a href="#" class="btn btn-primary my-2">Main call to action</a>-->
-<!--          <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
-<!--        </p>-->
-      </div>
-    </div>
-  </section>
+<section class="py-5 text-center container">
+<div class="row py-lg-5">
+  <div class="col-lg-6 col-md-8 mx-auto">
+    <h1 class="fw-light">Каталог смартфонов</h1>
+    <p class="lead text-body-secondary">Смартфоны на любой вкус и на любой карман.</p>
+      <p> 
+          {% for category in categories %}
+              <a href="{% url 'catalog:products_category' category.pk %}" class="btn btn-primary my-2">Категория: {{ category.name }}</a>
+          {% endfor %}  
+      </p>
+  </div>
+</div>
+</section>
 
 {% block content %}
 {% endblock %}
