@@ -8,11 +8,6 @@ def products_list(request):
     return render(request, 'products_list.html', context)
 
 
-def categories_list(request):
-    context = {"categories": Category.objects.all()}
-    return render(request, 'base.html', context)
-
-
 def product_detail(request, pk):
     product = get_object_or_404(Products, pk=pk)
     context = {"product": product}
