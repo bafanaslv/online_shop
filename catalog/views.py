@@ -4,19 +4,36 @@ from django.views.generic import ListView, DetailView
 
 
 class ProductListView(ListView):
-    model = Products, Category
+    model = Products
+    template_name = 'products_list.html'
+
+    @staticmethod
+    def all_category():
+        return Category.objects.all()
+
+
+class CategoryProductListView(ListView):
+    model = Products
+    template_name = 'products_list.html'
+
+    def get_queryset(self):
+        cat = self.kwargs['category']
+        queryset = Products.objects.filter(category=cat)
+        return queryset
+
+    @staticmethod
+    def all_category():
+        return Category.objects.all()
+
+
+class ProductDetailView(DetailView):
+    model = Products
     template_name = 'products_list.html'
 
 
-def products_list(request):
-    context = {"products": Products.objects.all(),
-               "categories": Category.objects.all()}
-    return render(request, 'products_list.html', context)
-
-
 def product(request, pk):
-    product = get_object_or_404(Products, pk=pk)
-    context = {"product": product}
+    products = get_object_or_404(Products, pk=pk)
+    context = {"product": products}
     return render(request, 'product_detail.html', context)
 
 
@@ -24,10 +41,6 @@ def products_category(request, cat):
     context = {"products": Products.objects.filter(category=cat),
                "categories": Category.objects.all()}
     return render(request, 'products_list.html', context)
-
-
-def home(request):
-    return render(request, 'home.html')
 
 
 def contact(request):
