@@ -1,5 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from catalog.models import Products, Category
+from django.views.generic import ListView, DetailView
+
+
+class ProductListView(ListView):
+    model = Products, Category
+    template_name = 'products_list.html'
 
 
 def products_list(request):
