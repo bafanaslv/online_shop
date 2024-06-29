@@ -28,19 +28,17 @@ class CategoryProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Products
-    template_name = 'products_list.html'
+    template_name = 'product_detail.html'
+
+    @staticmethod
+    def all_category():
+        return Category.objects.all()
 
 
 def product(request, pk):
     products = get_object_or_404(Products, pk=pk)
     context = {"product": products}
     return render(request, 'product_detail.html', context)
-
-
-def products_category(request, cat):
-    context = {"products": Products.objects.filter(category=cat),
-               "categories": Category.objects.all()}
-    return render(request, 'products_list.html', context)
 
 
 def contact(request):
