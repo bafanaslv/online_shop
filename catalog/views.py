@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from catalog.models import Products, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 class ProductListView(ListView):
@@ -35,6 +35,12 @@ class ProductDetailView(DetailView):
     def all_category():
         return Category.objects.all()
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        self.object.view_counter += 1
+        self.object.save()
+        return self.object
+
 
 class ProductCreateView(CreateView):
     model = Products
@@ -49,11 +55,15 @@ class ProductUpdateView(UpdateView):
     template_name = 'product_create.html'
     success_url = reverse_lazy("catalog:products_list")
 
+    def get_success_url(self):
+        return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
+
 
 class ProductDeleteView(DeleteView):
     model = Products
     template_name = 'product_confirm_delete.html'
     success_url = reverse_lazy("catalog:products_list")
+
 
 def contact(request):
     if request.method == 'POST':
