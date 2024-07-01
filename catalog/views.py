@@ -2,6 +2,7 @@ from django.shortcuts import render
 from catalog.models import Products, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
 
 
 class ProductListView(ListView):
@@ -40,6 +41,9 @@ class ProductDetailView(DetailView):
         self.object.view_counter += 1
         self.object.save()
         return self.object
+    #
+    # def someview(request):
+    #     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class ProductCreateView(CreateView):

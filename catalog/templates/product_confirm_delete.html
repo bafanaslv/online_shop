@@ -11,7 +11,8 @@
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <button type="submit" class="btn btn-primary">Удалить</button>
-                        <a class="btn btn-primary" href="{% url 'catalog:products_list' %}" role="button">Отменить</a>
+{#                        <a class="btn btn-primary" href="{% url 'catalog:products_list' %}" role="button">Отменить</a>#}
+                        <a class="btn btn-primary" onclick="history.back()" role="button">Отменить</a>
                     </div>
                 </div>
             </form>     
