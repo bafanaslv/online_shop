@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="album py-5 bg-body-tertiary">
+  <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for blog in object_list %}
+      <div class="col">
+        <div class="card-footer text-center shadow-sm">
+          <div class="col-md-6">
+            <img src="{{ blog.image | media_filter }}" class="h-100 border">
+          </div>
+          <div class="card-body">
+            <p class="card-text">{{ blog.title }}</p>
+            <p class="card-text">Содержимое: {{ blog.body }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-primary my-2" href="{% url 'blog/blog_form' blog.pk %}" role="button">Изменить</a>
+                <a class="btn btn-primary my-2" href="{% url 'blog/blog_confirm_delete' blog.pk %}" role="button">Удалить</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

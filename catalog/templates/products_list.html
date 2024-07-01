@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load my_tags %}
 {% block content %}
+{% include 'includes/category.html' %}
 <div class="album py-5 bg-body-tertiary">
   <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -9,7 +10,6 @@
         <div class="card-footer text-center shadow-sm">
           <div class="col-md-6">
             <img src="{{ product.image | media_filter }}" class="h-100 border">
-{#            <img src="{{ product.image | media_filter }}" class="object-fit: cover">#}
           </div>
           <div class="card-body">
             <p class="card-text">{{ product.name }}</p>

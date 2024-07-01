@@ -1,12 +1,16 @@
-<section class="py-0 text-center container">
-<div class="row py-lg-0">
-  <div class="col-lg-6 col-md-4 mx-auto">
-    {% for category in view.all_category %}
-      <a href="{% url 'catalog:products_category' category.pk %}" class="btn btn-primary my-2">Категория: {{ category.name }}</a>
-    {% endfor %}  
-    {% if view.all_category is not None %}
-        <a href="{% url 'catalog:product_create' %}" class="btn btn-primary my-2">Добавить смартфон</a>
-    {% endif %}  
-  </div>
-</div>
-</section>
+{% if view.all_category is not None %}
+    <section class="py-0 text-end container">
+    <div class="dropdown">
+      <a href="{% url 'catalog:product_create' %}" class="btn btn-primary my-2" >Добавить смартфон</a>
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Выберите категорию смартфонов
+      </button>
+      <ul class="dropdown-menu">
+        {% for category in view.all_category %}
+            <li><a class="dropdown-item" href="{% url 'catalog:products_category' category.pk %}">Категория: {{ category.name }}</a></li>
+        {% endfor %}  
+        <li><a class="dropdown-item" href="{% url 'catalog:products_list'%}">Все категории</a></li>
+      </ul>
+    </div>
+    </section>
+{% endif %}
