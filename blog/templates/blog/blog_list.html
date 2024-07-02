@@ -10,15 +10,15 @@
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{% url 'blog:publish_true' %}">Разрешенные к публикации</a></li>
         <li><a class="dropdown-item" href="{% url 'blog:publish_false' %}">Запрещенные к публикации</a></li>
-        <li><a class="dropdown-item" href="{% url 'blog:list' %}">Все блоги</a></li>
+        <li><a class="dropdown-item" href="{% url 'blog:list' %}">Все </a></li>
       </ul>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       {% for blog in object_list %}
           <div class="col">
             <div class="card-footer text-center shadow-sm">
-              <div class="col-md-6">
-                <img src="{{ blog.image | media_filter }}" class="h-100 border" alt="">
-              </div>
+{#              <div class="col-md-6">#}
+{#                <img src="{{ blog.image | media_filter }}" class="h-100 border" alt="">#}
+{#              </div>#}
               <div class="card-body">
                 <p class="card-text">Заголовок: {{ blog.title }}</p>
                 <p class="card-text">Ссылка: {{ blog.slug }}</p>
