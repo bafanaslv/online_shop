@@ -4,11 +4,12 @@ from django.db import models
 class Blog(models.Model):
     title = models.CharField(
         max_length=150,
-        verbose_name='название'
+        verbose_name='заголовок'
     )
     slug = models.CharField(
         max_length=100,
-        unique=True
+        unique=True,
+        verbose_name='ссылка'
     )
     body = models.TextField(
         verbose_name='содержимое'
@@ -19,7 +20,8 @@ class Blog(models.Model):
         help_text='загрузите изображение'
     )
     publish = models.BooleanField(
-        default=False
+        default=False,
+        verbose_name='публиковать'
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

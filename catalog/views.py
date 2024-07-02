@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from catalog.models import Products, Category
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
 
 
@@ -65,10 +65,15 @@ class ProductDeleteView(DeleteView):
     success_url = reverse_lazy("catalog:products_list")
 
 
-def contact(request):
-    if request.method == 'POST':
+class ContactViews(View):
+    template_name = 'contact.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
         print(f'You have new message from {name}({email}): {message}')
-    return render(request, 'contact.html')
+        return render(request, self.template_name)
