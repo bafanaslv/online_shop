@@ -16,9 +16,6 @@
       {% for blog in object_list %}
           <div class="col">
             <div class="card-footer text-center shadow-sm">
-{#              <div class="col-md-6">#}
-{#                <img src="{{ blog.image | media_filter }}" class="h-100 border" alt="">#}
-{#              </div>#}
               <div class="card-body">
                 <p class="card-text">Заголовок: {{ blog.title }}</p>
                 <p class="card-text">Ссылка: {{ blog.slug }}</p>
