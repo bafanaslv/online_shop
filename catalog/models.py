@@ -70,13 +70,12 @@ class Products(models.Model):
 
 
 class ProductVersion(models.Model):
-    name = models.CharField(
-        max_length=100,
-        verbose_name='Наименование',
-        help_text='Введите наименование продукта'
+    name = models.ForeignKey(
+        Products, on_delete=models.CASCADE,
+        related_name='product',
+        verbose_name='Наименование'
     )
     version_number = models.PositiveIntegerField(
-        max_length=3,
         verbose_name='номер версии',
         help_text='введите номер версии'
     )
