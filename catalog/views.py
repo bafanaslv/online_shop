@@ -1,6 +1,8 @@
+from django.core.exceptions import ValidationError
+from django.forms import inlineformset_factory
 from django.shortcuts import render
-from catalog.forms import ProductsForm
-from catalog.models import Products, Category
+from catalog.forms import ProductsForm, ProductVersion
+from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
 
@@ -12,6 +14,11 @@ class ProductListView(ListView):
     @staticmethod
     def all_category():
         return Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['version'] = ProductVersions.objects.filter(name_id=1)
+        return context
 
 
 class CategoryProductListView(ListView):
@@ -57,7 +64,31 @@ class ProductUpdateView(UpdateView):
     success_url = reverse_lazy("catalog:products_list")
 
     def get_success_url(self):
-        return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
+        # return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
+        return reverse("catalog:products_list")
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        ProductFormset = inlineformset_factory(Products, ProductVersions, ProductVersion, extra=1)
+        if self.request.method == "POST":
+            context_data["formset"] = ProductFormset(self.request.POST, instance=self.object)
+        else:
+            context_data["formset"] = ProductFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data["formset"]
+        # versions = ProductVersions.objects.filter(current_version=True, name=Products.objects.get(pk=self.object.pk))
+        # print(len(versions))
+        # if len(versions) > 2:
+        #     raise ValidationError('У продукта не может быть более одной активной версии.')
+        if form.is_valid() and formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid(form)
 
 
 class ProductDeleteView(DeleteView):

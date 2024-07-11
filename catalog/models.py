@@ -4,94 +4,83 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(
         max_length=100,
-        verbose_name='Наименование',
-        help_text='Введите наименование категории'
+        verbose_name="Наименование",
+        help_text="Введите наименование категории",
     )
     description = models.TextField(
-        verbose_name='Опиcание',
-        help_text='Введите описание категории'
+        verbose_name="Опиcание", help_text="Введите описание категории"
     )
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
 
 class Products(models.Model):
     name = models.CharField(
         max_length=100,
-        verbose_name='Наименование',
-        help_text='Введите наименование продукта'
+        verbose_name="Наименование"
     )
     description = models.TextField(
-        verbose_name='Опиcание',
-        help_text='Введите описание продукта'
+        verbose_name="Опиcание"
     )
     category = models.ForeignKey(
-        Category, on_delete=models.PROTECT,
-        related_name='categories',
-        verbose_name='Категория',
-        help_text='Выберите категорию из списка'
+        Category,
+        on_delete=models.PROTECT,
+        related_name="categories",
+        verbose_name="Категория"
     )
     image = models.ImageField(
-        upload_to='catalog/media',
-        blank=True, null=True, verbose_name='Изображение',
-        help_text='Загрузите изображение продукта'
+        upload_to="catalog/media",
+        blank=True,
+        null=True,
+        verbose_name="Изображение"
     )
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Цена',
-        help_text='Введите цену продукта'
+        verbose_name="Цена"
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Создан'
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name='Изменен'
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Изменен")
     view_counter = models.PositiveIntegerField(
         default=0,
-        verbose_name='Счетчик проcмотров',
-        help_text='Укажите количество просмотров'
+        verbose_name="Счетчик проcмотров"
     )
 
     def __str__(self):
-        return f'{self.name} {self.description} {self.price}'
+        return f"{self.name} {self.description} {self.price}"
 
     class Meta:
-        verbose_name = 'Продукт'
-        verbose_name_plural = 'Продукты'
+        verbose_name = "Продукт"
+        verbose_name_plural = "Продукты"
 
 
-class ProductVersion(models.Model):
+class ProductVersions(models.Model):
     name = models.ForeignKey(
-        Products, on_delete=models.CASCADE,
-        related_name='product',
-        verbose_name='Наименование'
+        Products,
+        on_delete=models.CASCADE,
+        related_name="product",
+        verbose_name="Наименование",
     )
     version_number = models.PositiveIntegerField(
-        verbose_name='номер версии',
-        help_text='введите номер версии'
+        verbose_name="номер версии"
     )
     version_name = models.CharField(
         max_length=100,
-        verbose_name='наименование версии',
-        help_text='введите наименование версии'
+        verbose_name="наименование версии"
     )
     current_version = models.BooleanField(
         default=False,
-        verbose_name='Признак текущей версии',
+        verbose_name="Признак текущей версии",
     )
 
     def __str__(self):
-        return f'{self.name} {self.version_number} {self.version_name}'
+        return f"{self.name} {self.version_number} {self.version_name}"
 
     class Meta:
-        verbose_name = 'Версия'
-        verbose_name_plural = 'Версиии'
+        verbose_name = "Версия продукта"
+        verbose_name_plural = "Версии продуктов"
