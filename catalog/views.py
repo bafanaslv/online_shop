@@ -15,10 +15,30 @@ class ProductListView(ListView):
     def all_category():
         return Category.objects.all()
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['version'] = ProductVersions.objects.filter(name_id=1)
+        context["object_list"] = object_list
         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     print(self.kwargs)
+    #     context['object_list'] = ProductVersions.objects.filter(name_id=self.kwargs['pk'])
+    #     return context
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context_data = super().get_context_data(*args, **kwargs)
+    #     versions = ProductVersions.objects.all()
+    #     print(type(list(versions)[0]))
+    #     # for prod in products:
+    #     #     versions = ProductVersions.objects.filter(name_id=prod.id)
+    #     #     if len(list(versions)) > 0:
+    #     #         active_version = list(versions)[0]
+    #     #     else:
+    #     #         active_version = 'Нет активной версии'
+    #     #
+    #     # context_data['object_list'] = products
+    #     return context_data
 
 
 class CategoryProductListView(ListView):

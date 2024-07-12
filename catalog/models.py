@@ -64,7 +64,7 @@ class ProductVersions(models.Model):
         Products,
         on_delete=models.CASCADE,
         related_name="product",
-        verbose_name="Наименование",
+        verbose_name="Наименование"
     )
     version_number = models.PositiveIntegerField(
         verbose_name="номер версии"
@@ -75,7 +75,7 @@ class ProductVersions(models.Model):
     )
     current_version = models.BooleanField(
         default=False,
-        verbose_name="Признак текущей версии",
+        verbose_name="Признак текущей версии"
     )
 
     def __str__(self):
