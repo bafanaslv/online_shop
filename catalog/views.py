@@ -15,30 +15,18 @@ class ProductListView(ListView):
     def all_category():
         return Category.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["object_list"] = object_list
-        return context
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        products = self.get_queryset()
+        for product in products:
+            active_versions = ProductVersions.objects.filter(name_id=product.pk, current_version=True)
+            if active_versions:
+                product.active = active_versions.last().version_name
+            else:
+                product.active = 'Отсутствует'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     print(self.kwargs)
-    #     context['object_list'] = ProductVersions.objects.filter(name_id=self.kwargs['pk'])
-    #     return context
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context_data = super().get_context_data(*args, **kwargs)
-    #     versions = ProductVersions.objects.all()
-    #     print(type(list(versions)[0]))
-    #     # for prod in products:
-    #     #     versions = ProductVersions.objects.filter(name_id=prod.id)
-    #     #     if len(list(versions)) > 0:
-    #     #         active_version = list(versions)[0]
-    #     #     else:
-    #     #         active_version = 'Нет активной версии'
-    #     #
-    #     # context_data['object_list'] = products
-    #     return context_data
+        context_data['object_list'] = products
+        return context_data
 
 
 class CategoryProductListView(ListView):
@@ -99,10 +87,12 @@ class ProductUpdateView(UpdateView):
     def form_valid(self, form):
         context_data = self.get_context_data()
         formset = context_data["formset"]
-        # versions = ProductVersions.objects.filter(current_version=True, name=Products.objects.get(pk=self.object.pk))
-        # print(len(versions))
-        # if len(versions) > 2:
-        #     raise ValidationError('У продукта не может быть более одной активной версии.')
+        cleaned_data = self.get('current_version')
+        print(cleaned_data)
+        version = ProductVersions.objects.filter(name_id=self.object.pk, current_version=True).exists()
+        if version is not True:
+            raise ValidationError('У продукта не может быть более одной активной версии.')
+
         if form.is_valid() and formset.is_valid():
             self.object = form.save()
             formset.instance = self.object

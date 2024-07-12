@@ -19,12 +19,20 @@ class ProductsForm(StyleFormMixin, ModelForm):
         model = Products
         exclude = ("view_counter",)
 
+    words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
     def clean_name(self):
-        words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
         cleaned_data = self.cleaned_data["name"]
-        for word in words:
+        for word in self.words:
             if word in cleaned_data:
-                raise ValidationError(f'Поле не должно содержать слово {word}')
+                raise ValidationError(f'Наименование не должно содержать слово {word}')
+        return cleaned_data
+
+    def clean_description(self):
+        cleaned_data = self.cleaned_data["description"]
+        for word in self.words:
+            if word in cleaned_data:
+                raise ValidationError(f'Поле описания не должно содержать слово {word}')
         return cleaned_data
 
 
@@ -32,3 +40,10 @@ class ProductVersion(StyleFormMixin, ModelForm):
     class Meta:
         model = ProductVersions
         fields = '__all__'
+
+    # def clean_is_active(self):
+    #     cleaned_data = self.cleaned_data.get('is_active')
+    #     version = ProductVersion.objects.filter(product=self.cleaned_data.get('product'), is_active=True).exists()
+    #     if cleaned_data and version:
+    #         raise ValidationError('Активная версия уже существует')
+    #     # return cleaned_data
