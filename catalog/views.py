@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 from django.shortcuts import render
@@ -5,6 +6,8 @@ from catalog.forms import ProductsForm, ProductVersion
 from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
+
+@transaction.autocommit
 
 
 class ProductListView(ListView):
@@ -84,13 +87,15 @@ class ProductUpdateView(UpdateView):
             context_data["formset"] = ProductFormset(instance=self.object)
         return context_data
 
-    def form_valid(self, form):
-        context_data = self.get_context_data()
+    def form_valid(self, form, **kwargs):
+        context_data = self.get_context_data(**kwargs)
         formset = context_data["formset"]
-        cleaned_data = self.get('current_version')
-        print(cleaned_data)
-        version = ProductVersions.objects.filter(name_id=self.object.pk, current_version=True).exists()
-        if version is not True:
+        product_versions = ProductVersions.objects.all()
+        active_version_count = 0
+        for product in product_versions:
+            if product.name_id == Products.objects.last().pk and product.current_version:
+                active_version_count += 1
+        if active_version_count > 1:
             raise ValidationError('У продукта не может быть более одной активной версии.')
 
         if form.is_valid() and formset.is_valid():

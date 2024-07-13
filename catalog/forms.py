@@ -40,10 +40,3 @@ class ProductVersion(StyleFormMixin, ModelForm):
     class Meta:
         model = ProductVersions
         fields = '__all__'
-
-    # def clean_is_active(self):
-    #     cleaned_data = self.cleaned_data.get('is_active')
-    #     version = ProductVersion.objects.filter(product=self.cleaned_data.get('product'), is_active=True).exists()
-    #     if cleaned_data and version:
-    #         raise ValidationError('Активная версия уже существует')
-    #     # return cleaned_data
