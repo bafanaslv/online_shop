@@ -7,8 +7,6 @@ from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
 
-@transaction.autocommit
-
 
 class ProductListView(ListView):
     model = Products
