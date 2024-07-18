@@ -5,7 +5,6 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class User(AbstractUser):
-    username = None
     email = models.EmailField(unique=True, verbose_name='Email')
     phone = models.CharField(max_length=15, verbose_name='Телефон', **NULLABLE)
     country = models.CharField(max_length=50, verbose_name='Страна', **NULLABLE)
@@ -13,7 +12,7 @@ class User(AbstractUser):
     token = models.CharField(max_length=100, verbose_name='token', **NULLABLE)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['']
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = 'Пользователь'
