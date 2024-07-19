@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User, NULLABLE
+
 
 class Category(models.Model):
     name = models.CharField(
@@ -44,6 +46,13 @@ class Products(models.Model):
         decimal_places=2,
         verbose_name="Цена"
     )
+    owner = models.ForeignKey(
+        User,
+        verbose_name='Владелец',
+        on_delete=models.CASCADE,
+        related_name="products", **NULLABLE
+    )
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Изменен")
     view_counter = models.PositiveIntegerField(
