@@ -59,7 +59,7 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductCreateView(CreateView, LoginRequiredMixin):
+class ProductCreateView(CreateView):
     model = Products
     form_class = ProductsForm
     template_name = 'product_create.html'
@@ -72,7 +72,10 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
     model = Products
     form_class = ProductsForm
     template_name = 'product_create.html'
@@ -118,7 +121,7 @@ class ProductUpdateView(UpdateView):
                 return self.form_invalid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Products
     template_name = 'product_confirm_delete.html'
     success_url = reverse_lazy("catalog:products_list")

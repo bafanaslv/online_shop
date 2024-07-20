@@ -33,6 +33,7 @@ class Command(BaseCommand):
                                                product["fields"]["category"],
                                                product["fields"]["image"],
                                                product["fields"]["price"],
+                                               product["fields"]["owner"],
                                                product["fields"]["created_at"],
                                                product["fields"]["updated_at"]
                                                ))

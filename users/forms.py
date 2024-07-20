@@ -12,3 +12,9 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 class PasswordResetForm(forms.Form):
     email = EmailField(label="Email", max_length=254)
+
+
+class UserProfileForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'phone', 'avatar')
