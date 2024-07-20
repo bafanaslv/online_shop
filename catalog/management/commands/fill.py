@@ -20,14 +20,18 @@ class Command(BaseCommand):
 
         product_for_create = []
         category_for_create = []
+        cat_sequence = 1
+        prod_sequence = 1
         self.clean_database()
-        self.reset_sequences()
+        self.reset_sequences_cat(cat_sequence)
+        self.reset_sequences_prod(prod_sequence)
 
         for category in Command.json_read_categories():
             category_for_create.append(Category(category["pk"],
                                                 category["fields"]["name"],
                                                 category["fields"]["description"]))
         Category.objects.bulk_create(category_for_create)
+        self.reset_sequences_cat(len(category_for_create))
 
         for product in Command.json_read_products():
             product_for_create.append(Products(product["pk"],
@@ -41,13 +45,20 @@ class Command(BaseCommand):
                                                product["fields"]["updated_at"]
                                                ))
         Products.objects.bulk_create(product_for_create)
+        self.reset_sequences_prod(len(product_for_create))
+
 
     @staticmethod
-    def reset_sequences():
+    def reset_sequences_cat(cat_sequence):
         """Сбрасываем автоинкрементные значения таблиц"""
         with connection.cursor() as cursor:
-            cursor.execute("ALTER SEQUENCE catalog_category_id_seq RESTART WITH 1;")
-            cursor.execute("ALTER SEQUENCE catalog_products_id_seq RESTART WITH 1;")
+            cursor.execute(f'ALTER SEQUENCE catalog_category_id_seq RESTART WITH {cat_sequence};')
+
+    @staticmethod
+    def reset_sequences_prod(prod_sequence):
+        """Сбрасываем автоинкрементные значения таблиц"""
+        with connection.cursor() as cursor:
+            cursor.execute(f'ALTER SEQUENCE catalog_products_id_seq RESTART WITH {prod_sequence};')
 
     @staticmethod
     def clean_database():
