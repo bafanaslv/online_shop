@@ -1,5 +1,6 @@
 from django.core.management import BaseCommand
 from catalog.models import Category, Products
+from django.db import connection
 import json
 
 
@@ -19,6 +20,8 @@ class Command(BaseCommand):
 
         product_for_create = []
         category_for_create = []
+        self.clean_database()
+        self.reset_sequences()
 
         for category in Command.json_read_categories():
             category_for_create.append(Category(category["pk"],
@@ -38,3 +41,16 @@ class Command(BaseCommand):
                                                product["fields"]["updated_at"]
                                                ))
         Products.objects.bulk_create(product_for_create)
+
+    @staticmethod
+    def reset_sequences():
+        """Сбрасываем автоинкрементные значения таблиц"""
+        with connection.cursor() as cursor:
+            cursor.execute("ALTER SEQUENCE catalog_category_id_seq RESTART WITH 1;")
+            cursor.execute("ALTER SEQUENCE catalog_products_id_seq RESTART WITH 1;")
+
+    @staticmethod
+    def clean_database():
+        """Очищаем базу данных"""
+        Products.objects.all().delete()
+        Category.objects.all().delete()
