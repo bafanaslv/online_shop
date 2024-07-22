@@ -7,12 +7,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SECRET_KEY = 'django-insecure-%$w-ph3igxx)2%i@^mkhsh(#5^e2qzo31y%sr220j(+27e^z)='
 
-# DEBUG = True
-#
-# ALLOWED_HOSTS = ['*']
+DEBUG = True
 
-DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
