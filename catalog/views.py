@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.forms import inlineformset_factory
 from django.shortcuts import render
-from catalog.forms import ProductsForm, ProductVersion
+from catalog.forms import ProductsForm, ProductVersion, ProductModeratorForm
 from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
@@ -119,6 +120,16 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
                 transaction.set_rollback(True)
                 form.add_error(None, 'У продукта не может быть более одной активной версии.')
                 return self.form_invalid(form)
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductsForm
+        if (user.has_perm("catalog.can_unpublish_product")
+                and user.has_perm("catalog.can_change_product_description")
+                and user.has_perm("catalog.can_change_product_category")):
+            return ProductModeratorForm
+        raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):

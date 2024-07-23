@@ -41,6 +41,7 @@ class Command(BaseCommand):
                                                product["fields"]["image"],
                                                product["fields"]["price"],
                                                product["fields"]["owner"],
+                                               product["fields"]["is_published"],
                                                product["fields"]["created_at"],
                                                product["fields"]["updated_at"]
                                                ))
@@ -50,13 +51,13 @@ class Command(BaseCommand):
 
     @staticmethod
     def reset_sequences_cat(cat_sequence):
-        """Сбрасываем автоинкрементные значения таблиц"""
+        """Сихронизируем автоинкрементные значения таблицы категория"""
         with connection.cursor() as cursor:
             cursor.execute(f'ALTER SEQUENCE catalog_category_id_seq RESTART WITH {cat_sequence};')
 
     @staticmethod
     def reset_sequences_prod(prod_sequence):
-        """Сбрасываем автоинкрементные значения таблиц"""
+        """Сихронизируем автоинкрементные значения таблицы продукты"""
         with connection.cursor() as cursor:
             cursor.execute(f'ALTER SEQUENCE catalog_products_id_seq RESTART WITH {prod_sequence};')
 

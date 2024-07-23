@@ -52,7 +52,7 @@ class Products(models.Model):
         on_delete=models.CASCADE,
         related_name="products", **NULLABLE
     )
-
+    is_published = models.BooleanField(default=False, verbose_name='Опубликован')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Изменен")
     view_counter = models.PositiveIntegerField(
@@ -66,6 +66,12 @@ class Products(models.Model):
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+        ordering = ["name"]
+        permissions = [
+            ("can_unpublish_product", 'Can unpublish product'),
+            ("can_change_product_description", "Can change product description"),
+            ("can_change_product_category", "Can change product category"),
+        ]
 
 
 class ProductVersions(models.Model):
