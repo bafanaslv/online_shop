@@ -45,7 +45,7 @@ class CategoryProductListView(ListView):
         return Category.objects.all()
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView, LoginRequiredMixin):
     model = Products
     template_name = 'product_detail.html'
 
@@ -55,9 +55,11 @@ class ProductDetailView(DetailView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        self.object.view_counter += 1
-        self.object.save()
-        return self.object
+        if self.request.user == self.object.owner:
+            self.object.view_counter += 1
+            self.object.save()
+            return self.object
+        return PermissionDenied
 
 
 class ProductCreateView(CreateView):
@@ -125,8 +127,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user == self.object.owner:
             return ProductsForm
-        if (user.has_perm("catalog.can_unpublish_product")
-                and user.has_perm("catalog.can_change_product_description")
+        if (user.has_perm("catalog.can_change_product_description")
                 and user.has_perm("catalog.can_change_product_category")):
             return ProductModeratorForm
         raise PermissionDenied
