@@ -21,7 +21,9 @@
                     {% if perms.catalog.can_change_product_description and perms.catalog.can_change_product_category or user == product.owner %}
                         <a class="btn btn-primary my-2" href="{% url 'catalog:product_update' product.pk %}" role="button">Изменить</a>
                     {% endif %}    
-                    <a class="btn btn-primary my-2" href="{% url 'catalog:product_delete' product.pk %}" role="button">Удалить</a>
+                    {% if user == product.owner %}
+                        <a class="btn btn-danger my-2" href="{% url 'catalog:product_delete' product.pk %}" role="button">Удалить</a>
+                    {% endif %}    
                 {% endif %}
             </div>
           </div>
