@@ -7,6 +7,7 @@ from catalog.forms import ProductsForm, ProductVersion, ProductModeratorForm
 from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
+from catalog.services import get_products_from_cache
 
 
 class ProductListView(ListView):
@@ -29,6 +30,9 @@ class ProductListView(ListView):
 
         context_data['object_list'] = products
         return context_data
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class CategoryProductListView(ListView):
