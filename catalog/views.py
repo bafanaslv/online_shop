@@ -7,7 +7,7 @@ from catalog.forms import ProductsForm, ProductVersion, ProductModeratorForm
 from catalog.models import Products, Category, ProductVersions
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse_lazy, reverse
-from catalog.services import get_products_from_cache
+from catalog.services import get_products_from_cache, get_categories_from_cache
 
 
 class ProductListView(ListView):
@@ -46,16 +46,19 @@ class CategoryProductListView(ListView):
 
     @staticmethod
     def all_category():
-        return Category.objects.all()
+        """Обращение к сервису для получения списка категорий из БД или из кэша."""
+        return get_categories_from_cache()
 
 
 class ProductDetailView(DetailView, LoginRequiredMixin):
+
     model = Products
     template_name = 'product_detail.html'
 
     @staticmethod
     def all_category():
-        return Category.objects.all()
+        """Обращение к сервису для получения списка категорий из БД или из кэша."""
+        return get_categories_from_cache()
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -101,6 +104,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
     @transaction.atomic
     def form_valid(self, form, **kwargs):
+        """Данный декоратор рабоает в режиме транзакции и откатывает (transaction.set_rollback(True)) изменерия если
+        у продукта оказывает больше одной активной версии (active_version_count > 1)."""
         context_data = self.get_context_data(**kwargs)
         formset = context_data["formset"]
         product_versions = ProductVersions.objects.all()

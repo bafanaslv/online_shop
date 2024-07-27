@@ -16,7 +16,7 @@ def get_products_from_cache():
     return products
 
 
-def get_catalog_from_cache():
+def get_categories_from_cache():
     """Получаем список категорий из кэша если он не пустой или из базы данных если пустой."""
     if not CACHE_ENABLED:
         return Category.objects.all()
