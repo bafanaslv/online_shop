@@ -4,7 +4,7 @@ from config.settings import CACHE_ENABLED
 
 
 def get_products_from_cache():
-    """Получаем список продуктов из кэша если он не пустой илил из базы данных если пустой."""
+    """Получаем список продуктов из кэша если он не пустой или из базы данных если пустой."""
     if not CACHE_ENABLED:
         return Products.objects.all()
     key = "products_list"
